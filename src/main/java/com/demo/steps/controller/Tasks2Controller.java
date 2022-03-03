@@ -1,11 +1,10 @@
 package com.demo.steps.controller;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.*;
 import com.demo.steps.entities.Task;
+import com.demo.steps.service.Tasks2Service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,43 +16,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController //da la capacidad de exponer el api por medio de http
-@RequestMapping("steps/01/tasks") //Para modificar la ruta de acceso -> tasks/  get/post/delete/put
-public class Tasks1Controller {
+/**
+ * Este controlador se quedó con la lógica para solo estar ruteando
+ */
 
-	private final List<Task> taskList = new ArrayList<>(); 
+@RestController
+@RequestMapping("steps/02/tasks")
+public class Tasks2Controller {
 
-    //Endpoint
-	//Despues del 8080 va el /	
+    //Ahora invocamos al servicio, elemento que aplica lógica
+    private final Tasks2Service service; //No se inicializa porque estamos usando spring, el se encarga de crear el componente
+
+    //Constructor para inicializar el servicio
+    public Tasks2Controller( @Autowired Tasks2Service service){// Autowired le dice a Spring que se encargue de crear el objeto service y pasarlo al controller
+        this.service = service;
+    }
+    
 	@GetMapping("") //Al invocar el route tasks con get nos devolvera la lista 
 	public ResponseEntity<List< Task> > fetchAllTask(){
-		//return "[ returning all tasks ";
-       	return ResponseEntity.ok().body(taskList); //devolvemos una lista de tareas
-        
+		
+       	return ResponseEntity.ok().body( service.getAllTask()); 
 	}
 
 	@PostMapping("")//Al invocar el route tasks con post guardara la tarea en la lista 
 	public ResponseEntity<Task> postTask( @RequestBody Task newTask){ //Lo que venga en el requestBody lo va transformar en un objeto java
-		newTask.setActive(false);
-		newTask.setCreatedAt( LocalDateTime.now() ); //Seteamos la fecha
 		
-		long id =  taskList.size() + 1 ;
-		newTask.setId(id);
-
-		taskList.add(newTask); //agregamos la tarea a la lista
-		
-		//return "saving..";
 		//Devolvemos un created con el nuevo objeto creado en el body
-        return ResponseEntity.status(HttpStatus.CREATED).body(newTask);
+        return ResponseEntity.status(HttpStatus.CREATED).body( service.saveTask(newTask));
         
 	}
 
 	@GetMapping("/{taskId}") ///{variable}
 	public ResponseEntity<Task> fetchTaskById( @PathVariable("taskId") Long taskId ){
-		return	taskList
-				.stream()
-				.filter( current -> taskId == current.getId() ) //es la condicion, te devuelve el array que encuentre
-				.findFirst() // te trae el primer elemento que encuentre
+		return service.getTaskById(taskId)
 				.map( task -> ResponseEntity.ok().body(task)) //si ese elemento es != de null, se regresa el task y un cogido ok
 				.orElse( ResponseEntity.status(HttpStatus.NOT_FOUND ).build() ); //Si es null
 	}
@@ -61,30 +56,22 @@ public class Tasks1Controller {
 
 	@DeleteMapping("/{taskId}")
 	public ResponseEntity<?> deleteTask( @PathVariable("taskId") Long taskId){
-		return taskList
-						.stream() //
-						.filter( current -> taskId == current.getId() )
-						.findFirst()
-						.map( task -> {
-							taskList.remove( task);//borra el elemento de la lista
-							return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-						}) //para varias opciones
-						.orElse( ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-		//return "delete...";
-        //return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        boolean answer = service.deleteTask(taskId); //Para saber si lo borro o no
+
+        if(answer){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+		
 	}
 
-	@PutMapping("/{taskId}")
+    //Accion Update
+	@PutMapping("/{taskId}") 
 	public ResponseEntity<Task> putTask( @PathVariable("taskId") Long taskId, @RequestBody Task updateTask){
 		//return " update";
-		return taskList
-						.stream() //
-						.filter( current -> taskId == current.getId() )
-						.findFirst()
-						.map( task -> {
-							task.setTitle( updateTask.getTitle());
-							task.setDescription( updateTask.getDescription() );
-							task.setUpdateAt( LocalDateTime.now() );
+		return service.updateTask(taskId, updateTask)
+						.map( task -> {							
 							return ResponseEntity.ok().body(task); //devuelve la tarea actualizada
 						})
 						.orElse( ResponseEntity.status(HttpStatus.NOT_FOUND).build());
