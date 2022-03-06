@@ -25,11 +25,11 @@ public class Task {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "is_Active")
+    @Column(name = "is_active")
     private Boolean active;
 
     @Column(name =  "owner_id")
-    private String ownerid;
+    private String ownerId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -40,24 +40,29 @@ public class Task {
     
 
     
-    //Método toString para saber el estado del objeto
+    //Método toString para saber el estado del objeto   
+    
     @Override
     public String toString() {
-        return "Task [active=" + active + ", description=" + description + ", taskId=" + taskId + ", ownerid=" + ownerid
+        return "Task [active=" + active + ", description=" + description + ", ownerId=" + ownerId + ", taskId=" + taskId
                 + ", title=" + title + "]";
     }
 
     //Getter & setter
-    public String getOwnerid() {
-        return ownerid;
+
+    public String getOwnerId() {
+        return ownerId;
     }
-    public void setOwnerid(String ownerid) {
-        this.ownerid = ownerid;
-    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }    
+    
    
     public Long getTaskId() {
         return taskId;
     }
+    
 
     public void setTaskId(Long taskId) {
         this.taskId = taskId;
@@ -75,12 +80,15 @@ public class Task {
     public void setDescription(String description) {
         this.description = description;
     }
+    
     public Boolean getActive() {
         return this.active;
     }
+
     public void setActive(Boolean active) {
         this.active = active;
     }
+
     public LocalDateTime getCreatedAt() {
         return this.createdAt;
     }

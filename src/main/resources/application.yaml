@@ -1,5 +1,5 @@
 server:  
-  port: 8080
+  port: ${APPLICATION_PORT}
   servlet:
     context-path: "/todo/api/"
 
@@ -27,3 +27,6 @@ logging:
     org.springframework.web: ERROR
     org.hibernate: ERROR #solo manda informacion si falla algo
     com.demo.steps: DEBUG #aquí si mandame información de debug, activa debug para mis clases
+
+##variables de entorno
+myYamlValue: "Step by step in YAML"
