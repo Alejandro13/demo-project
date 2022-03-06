@@ -16,3 +16,14 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
         format_sql: true
     show_sql: true
+  output:
+    ansi: #SALIDA ESTANDAR
+      enabled: ALWAYS #pone colores a nuestro log, lo hace más amigable a la vista
+
+
+logging:
+  level:
+    root: WARN
+    org.springframework.web: ERROR
+    org.hibernate: ERROR #solo manda informacion si falla algo
+    com.demo.steps: DEBUG #aquí si mandame información de debug, activa debug para mis clases

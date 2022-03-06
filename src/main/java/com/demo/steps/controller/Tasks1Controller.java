@@ -38,7 +38,7 @@ public class Tasks1Controller {
 		newTask.setCreatedAt( LocalDateTime.now() ); //Seteamos la fecha
 		
 		long id =  taskList.size() + 1 ;
-		newTask.setId(id);
+		newTask.setTaskId(id);
 
 		taskList.add(newTask); //agregamos la tarea a la lista
 		
@@ -52,7 +52,7 @@ public class Tasks1Controller {
 	public ResponseEntity<Task> fetchTaskById( @PathVariable("taskId") Long taskId ){
 		return	taskList
 				.stream()
-				.filter( current -> taskId == current.getId() ) //es la condicion, te devuelve el array que encuentre
+				.filter( current -> taskId == current.getTaskId() ) //es la condicion, te devuelve el array que encuentre
 				.findFirst() // te trae el primer elemento que encuentre
 				.map( task -> ResponseEntity.ok().body(task)) //si ese elemento es != de null, se regresa el task y un cogido ok
 				.orElse( ResponseEntity.status(HttpStatus.NOT_FOUND ).build() ); //Si es null
@@ -63,7 +63,7 @@ public class Tasks1Controller {
 	public ResponseEntity<?> deleteTask( @PathVariable("taskId") Long taskId){
 		return taskList
 						.stream() //
-						.filter( current -> taskId == current.getId() )
+						.filter( current -> taskId == current.getTaskId() )
 						.findFirst()
 						.map( task -> {
 							taskList.remove( task);//borra el elemento de la lista
@@ -79,7 +79,7 @@ public class Tasks1Controller {
 		//return " update";
 		return taskList
 						.stream() //
-						.filter( current -> taskId == current.getId() )
+						.filter( current -> taskId == current.getTaskId() )
 						.findFirst()
 						.map( task -> {
 							task.setTitle( updateTask.getTitle());

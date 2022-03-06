@@ -17,7 +17,7 @@ public class Task {
     @Id
     @Column( name = "id" ) //si el nombre de la columna es igual al nombre de mi atributo, podemos omitir este paso
     @GeneratedValue( strategy =  GenerationType.IDENTITY )
-    private Long id;
+    private Long taskId;
 
     @Column(name = "title")
     private String title;
@@ -37,20 +37,32 @@ public class Task {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
-    //Getter & setter
+    
 
+    
+    //Método toString para saber el estado del objeto
+    @Override
+    public String toString() {
+        return "Task [active=" + active + ", description=" + description + ", taskId=" + taskId + ", ownerid=" + ownerid
+                + ", title=" + title + "]";
+    }
+
+    //Getter & setter
     public String getOwnerid() {
         return ownerid;
     }
     public void setOwnerid(String ownerid) {
         this.ownerid = ownerid;
     }
-    public Long getId(){
-        return this.id;
+   
+    public Long getTaskId() {
+        return taskId;
     }
-    public void setId(Long id){
-        this.id = id;
+
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
     }
+
     public String getTitle() {
         return this.title;
     }
