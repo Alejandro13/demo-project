@@ -9,12 +9,14 @@ import com.demo.steps.repository.TaskRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 //ESTE SERVICIO UTILIZA LOS METODOS DE JPA
 
 @Service //Elemento que controla spring que va inyectar, spring lo crea con todas la dependencia
+@Qualifier("taskService") //Sirve para poner un nombre, es una forma de decir que es una clase que implementa una interfaz en particulas pero la vamos a diferenciar
 public class TasksServiceImpl  implements ITaskService{ //implementamos la nueva interfaz
 
     private final TaskRepository repository;
@@ -26,8 +28,13 @@ public class TasksServiceImpl  implements ITaskService{ //implementamos la nueva
         this.repository = repository;
     }
 
-	public List<Task> getAllTask(){ //no es un componente web, por eso quitamos ResponseEntity		
-       	return repository.findAll(); //método de JPA , select * from table;       
+	public List<Task> getAllTask(){ //no es un componente web, por eso quitamos ResponseEntity	
+		//Lo moficamos para probar el default method
+		List<Task> taskList = repository.findAll();
+		String str = printAllTask(taskList);	
+		LOGGER.debug(" ------- TAREAS CONVERTIDAS A STRING-------" + str + "--------");
+       	//return repository.findAll(); //método de JPA , select * from table;       
+		return taskList;
 	}
 
 	

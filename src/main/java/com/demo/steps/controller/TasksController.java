@@ -8,6 +8,7 @@ import com.demo.steps.service.TasksServiceImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class TasksController {
 	private final String projectName;
 
     //Constructor para inicializar el servicio
-    public TasksController( @Autowired TasksServiceImpl service,// Autowired le dice a Spring que se encargue de crear el objeto service y pasarlo al controller
+    public TasksController( @Qualifier("taskService") ITaskService service,// indicamos que TaskService(bean) vamos a utilizar
 
 		@Value("${myYamlValue}") String yamlValue, //variable de ambiente
 		@Value("${PROJECT_NAME}")String projectName){//Obtenemos variable de ambiente desde archivo yaml

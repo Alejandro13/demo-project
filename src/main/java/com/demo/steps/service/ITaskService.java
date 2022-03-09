@@ -27,5 +27,16 @@ public interface ITaskService {
 	public List<Task> findByOwnerId( String ownerId );
 
 	public List<Task> findByOwnerIdAndStatus(String ownerId, boolean status);
+
+	//Default methods, caracteristica de java 8
+
+	default String printAllTask( List<Task> taskList){
+
+		
+		return taskList
+						.stream()
+						.map( current -> current.toString()) //generar una lista de Strings
+						.reduce( "" , ( concatenated , current) -> concatenated + current); //valor inicial , (lambda que tiene los valores, valor current) -> concatenamos las tareas Strings
+	}
     
 }
