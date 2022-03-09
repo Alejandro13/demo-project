@@ -7,15 +7,15 @@ spring:
   application: 
     name: todoapp
   datasource:
-    password: SuperSecret
-    url: jdbc:h2:mem:todoappdb
-    username: sa
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
-        format_sql: true
-    show_sql: true
+        format_sql: ${IS_FORMAT_SQL}
+    show_sql: ${IS_SHOW_SQL}
   output:
     ansi: #SALIDA ESTANDAR
       enabled: ALWAYS #pone colores a nuestro log, lo hace más amigable a la vista

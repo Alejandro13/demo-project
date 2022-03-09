@@ -2,7 +2,8 @@ package com.demo.steps.controller;
 
 import java.util.*;
 import com.demo.steps.entities.Task;
-import com.demo.steps.service.Tasks5Service;
+import com.demo.steps.service.ITaskService;
+import com.demo.steps.service.TasksServiceImpl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,23 +26,25 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping("steps/05/tasks")
-public class Tasks5Controller {
+@RequestMapping("steps/06/tasks")
+public class TasksController {
 
     //Ahora invocamos al servicio, elemento que aplica lógica
-    private final Tasks5Service service; //No se inicializa porque estamos usando spring, el se encarga de crear el componente
+    private final ITaskService service; //No se inicializa porque estamos usando spring, el se encarga de crear el componente, USAMOS LA INTERFAZ DE SERVICIO
 
 	//Creamos un Log para depurar nuestro codigo
-	private final Log LOGGER = LogFactory.getLog(Tasks4Controller.class);
+	private final Log LOGGER = LogFactory.getLog(TasksController.class);
 
 	//Es final para que una vez que sea asignada su valor ya nadie la cambie después
 	private final String yamlValue;
 	private final String projectName;
 
     //Constructor para inicializar el servicio
-    public Tasks5Controller( @Autowired Tasks5Service service,// Autowired le dice a Spring que se encargue de crear el objeto service y pasarlo al controller
+    public TasksController( @Autowired TasksServiceImpl service,// Autowired le dice a Spring que se encargue de crear el objeto service y pasarlo al controller
+
 		@Value("${myYamlValue}") String yamlValue, //variable de ambiente
 		@Value("${PROJECT_NAME}")String projectName){//Obtenemos variable de ambiente desde archivo yaml
+
         this.service = service;
 		this.yamlValue = yamlValue;
 		this.projectName = projectName;
